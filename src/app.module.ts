@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Person } from './people/entity/person.entity';
+import { Person } from './people/entities/person.entity';
+import { PeopleModule } from './people/people.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -15,8 +14,8 @@ import { Person } from './people/entity/person.entity';
     entities: [Person],
     synchronize: true
 
-  })],
-  controllers: [AppController],
-  providers: [AppService],
+  }), PeopleModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

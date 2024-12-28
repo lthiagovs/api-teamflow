@@ -1,29 +1,42 @@
-import { Injectable } from '@nestjs/common';
-import { PeopleRepository } from './people.repository';
-import { Person } from './entity/person.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Person } from './entities/person.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PeopleService {
-    constructor(private repository: PeopleRepository) {}
+    constructor(@InjectRepository(Person) private repository: Repository<Person>) {}
 
     getAll(){
-        return this.repository.getAll();
+        return this.repository.find();
     }
 
     getOne(id: number){
-        return this.repository.getOne(id);
+        return this.repository.findBy({id})
     }
 
     createPerson(person: Person){
-        return this.repository.createPerson(person);
+        //this.repository.create(person);
+        this.repository.save(person);
     }
 
-    updatePerson(id: number, person: Person){
-        return this.repository.updatePerson(id, person);
+    async updatePerson(id: number, attrs: Partial<Person>){
+        const person = await this.getOne(id);
+        if(!person){
+            throw new NotFoundException('person not found');
+        }
+
+        Object.assign(person, attrs);
+        return this.repository.save(person);
     }
 
-    removePerson(id: number){
-        return this.repository.removePerson(id);
+    async removePerson(id: number){
+        const person = await this.getOne(id);
+        if(!person){
+            throw new NotFoundException('person not found');
+        }
+
+        return this.repository.remove(person);
     }
 
 }
