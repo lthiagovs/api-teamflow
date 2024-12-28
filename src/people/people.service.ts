@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Person } from './entities/person.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreatePersonDto } from './dtos/createperson.dto';
 
 @Injectable()
 export class PeopleService {
@@ -15,8 +16,8 @@ export class PeopleService {
         return this.repository.findBy({id})
     }
 
-    createPerson(person: Person){
-        //this.repository.create(person);
+    createPerson(createPerson: CreatePersonDto){
+        const person = this.repository.create(createPerson);
         this.repository.save(person);
     }
 

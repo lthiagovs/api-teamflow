@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { PeopleService } from './people.service';
 import { Person } from './entities/person.entity';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreatePersonDto } from './dtos/createperson.dto';
 
 @ApiTags('people')
 @Controller('people')
@@ -24,7 +25,7 @@ export class PeopleController {
 
     @ApiOperation({summary: 'Create a new person'})
     @Post()
-    createPerson(@Body() person: Person){
+    createPerson(@Body() person: CreatePersonDto){
         return this.service.createPerson(person);
     }
 
